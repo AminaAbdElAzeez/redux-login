@@ -1,0 +1,8 @@
+.app {
+  position: relative;
+}
+@media screen and (max-width: 430px) {
+  .app {
+    width: 90%;
+  }
+}
