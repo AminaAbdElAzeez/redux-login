@@ -1,13 +1,16 @@
 import React from "react";
+import styles from "./Logout.module.css";
 
-function Logout({ username, handleLogout }) {
+function Logout({ email, handleLogout }) {
   return (
-    <div>
-      <button className="check">
+    <div className={styles.logout}>
+      <button className={styles.check}>
         <i className="bi bi-check-lg"></i>
       </button>
-      <h2>Welcome, {username} 🌹🤝</h2>
-      <button onClick={handleLogout}>Logout</button>
+      <h2 className={styles.title}>Welcome, {email.split("@")[0]} 🌹🤝</h2>
+      <button onClick={handleLogout} className={styles.btn}>
+        Logout
+      </button>
     </div>
   );
 }
