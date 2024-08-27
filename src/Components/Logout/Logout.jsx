@@ -7,7 +7,7 @@ function Logout({ email, handleLogout }) {
       <button className={styles.check}>
         <i className="bi bi-check-lg"></i>
       </button>
-      <h2 className={styles.title}>Welcome, {email.split("@")[0]} 🌹🤝</h2>
+      <h2 className={styles.title}>Welcome, {email} 🌹🤝</h2>
       <button onClick={handleLogout} className={styles.btn}>
         Logout
       </button>

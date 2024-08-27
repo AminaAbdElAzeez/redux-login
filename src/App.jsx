@@ -3,7 +3,7 @@ import Login from "./Components/Login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, setToken } from "./Store/Actions/AuthActions";
 import Logout from "./Components/Logout/Logout";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Toast from "./Components/Toast/Toast";
 import axios from "axios";
 
@@ -11,9 +11,17 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [toastMessage, setToastMessage] = useState("");
+  const [loggedInEmail, setLoggedInEmail] = useState("");
 
   const token = useSelector((state) => state.token);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    if (savedEmail && token) {
+      setLoggedInEmail(savedEmail);
+    }
+  }, [token]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,23 +31,22 @@ function App() {
       return;
     }
 
-    const loginData = {
-      email: email,
-      password: password,
-    };
+    const loginData = { email, password };
 
     axios
       .post("https://backend.profferdeals.com/api/admin/login", loginData, {
         headers: {
           "Content-Type": "application/json",
-          Accept: "application/json",
         },
       })
       .then((response) => {
         const data = response.data;
         if (data.token) {
           dispatch(setToken(data.token));
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("email", email);
+          setLoggedInEmail(email);
+          setEmail("");
+          setPassword("");
           setToastMessage("Login successfully 🌹 ");
         } else {
           setToastMessage("Login Failed 🤷‍♂️ ");
@@ -53,7 +60,8 @@ function App() {
 
   const handleLogout = () => {
     dispatch(removeToken());
-    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setLoggedInEmail("");
   };
 
   const handleCloseToast = () => {
@@ -63,7 +71,7 @@ function App() {
   return (
     <div className="app">
       {token ? (
-        <Logout email={email} handleLogout={handleLogout} />
+        <Logout email={loggedInEmail} handleLogout={handleLogout} />
       ) : (
         <Login
           email={email}
