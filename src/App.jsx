@@ -3,7 +3,7 @@ import Login from "./Components/Login/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, setToken } from "./Store/Actions/AuthActions";
 import Logout from "./Components/Logout/Logout";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Toast from "./Components/Toast/Toast";
 import axios from "axios";
 
@@ -11,17 +11,10 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [toastMessage, setToastMessage] = useState("");
-  const [loggedInEmail, setLoggedInEmail] = useState("");
 
   const token = useSelector((state) => state.token);
+  const loggedInEmail = useSelector((state) => state.email);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const savedEmail = localStorage.getItem("email");
-    if (savedEmail && token) {
-      setLoggedInEmail(savedEmail);
-    }
-  }, [token]);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -42,9 +35,7 @@ function App() {
       .then((response) => {
         const data = response.data;
         if (data.token) {
-          dispatch(setToken(data.token));
-          localStorage.setItem("email", email);
-          setLoggedInEmail(email);
+          dispatch(setToken(data.token, email));
           setEmail("");
           setPassword("");
           setToastMessage("Login successfully 🌹 ");
@@ -60,8 +51,6 @@ function App() {
 
   const handleLogout = () => {
     dispatch(removeToken());
-    localStorage.removeItem("email");
-    setLoggedInEmail("");
   };
 
   const handleCloseToast = () => {
