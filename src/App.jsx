@@ -5,7 +5,7 @@ import Login from "./Components/Login/Login";
 import Logout from "./Components/Logout/Logout";
 import Toast from "./Components/Toast/Toast";
 import "./App.css";
-import axiosInstance from "./Utils/AxiosInstance";
+import axiosInstance from "./Utils/axiosInstance.js";
 
 function App() {
   const [email, setEmail] = useState("");
