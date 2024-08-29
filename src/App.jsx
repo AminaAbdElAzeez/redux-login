@@ -1,11 +1,11 @@
-import "./App.css";
-import Login from "./Components/Login/Login";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { removeToken, setToken } from "./Store/Actions/AuthActions";
+import Login from "./Components/Login/Login";
 import Logout from "./Components/Logout/Logout";
-import { useState } from "react";
 import Toast from "./Components/Toast/Toast";
-import axios from "axios";
+import "./App.css";
+import axiosInstance from "./Utils/AxiosInstance";
 
 function App() {
   const [email, setEmail] = useState("");
@@ -26,12 +26,8 @@ function App() {
 
     const loginData = { email, password };
 
-    axios
-      .post("https://backend.profferdeals.com/api/admin/login", loginData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+    axiosInstance
+      .post("/admin/login", loginData)
       .then((response) => {
         const data = response.data;
         if (data.token) {
